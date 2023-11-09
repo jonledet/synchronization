@@ -56,7 +56,7 @@ Follow the on-screen prompts and instructions to interact with and observe the s
 
 You can run each problem separately and observe how they handle synchronization.
 
-Acknowledgments
+## Acknowledgments
 This project was completed to gain a deeper understanding of synchronization problems and their solutions. The code and implementations were developed as part of a learning process. Special thanks to the educators and resources that provided guidance and insights during the project's development.
 
 Feel free to explore the source code and use it as a reference for your own synchronization challenges or for educational purposes.
