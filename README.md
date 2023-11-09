@@ -13,7 +13,7 @@ This Java project is a synchronization problem solver that aims to provide solut
 The project focuses on solving the following synchronization problems:
 
 1. **Dining Philosophers**
-   - A classic problem where philosophers sit around a dining table and must share chopsticks without causing conflicts.
+   - A classic problem where philosophers sit around a dining table and must share chopsticks without causing conflicts. Each philosopher(thread) needs 2 chopsticks(semaphores) to eat a meal.
 
 2. **Bounded-Buffer**
    - Simulates a post office with people, mailboxes, and messages. Semaphores are used to control mailbox access when sending messages. An extension of the bounded-buffer problem.
@@ -43,9 +43,9 @@ javac Main.java
 java Main
 ```
 
-To run Dining Philosophers, use the command line argument -A 1.
-To run Post Office Simulation, use the command line argument -A 2.
-To run Readers-Writer Problem, use the command line argument -A 3.
+- To run Dining Philosophers, use the command line argument -A 1.
+- To run Post Office Simulation, use the command line argument -A 2.
+- To run Readers-Writer Problem, use the command line argument -A 3.
 For example, to run Dining Philosophers, use:
 
 ```
