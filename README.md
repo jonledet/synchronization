@@ -41,13 +41,16 @@ The project is structured as follows:
 ```bash
 javac Main.java
 java Main
+```
 
 To run Dining Philosophers, use the command line argument -A 1.
 To run Post Office Simulation, use the command line argument -A 2.
 To run Readers-Writer Problem, use the command line argument -A 3.
 For example, to run Dining Philosophers, use:
 
+```
 java Main -A 1
+```
 
 Follow the on-screen prompts and instructions to interact with and observe the solution.
 
