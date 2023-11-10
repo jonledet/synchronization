@@ -5,6 +5,7 @@ public class Main {
 
     public static Random random = new Random();
     public static Scanner input = new Scanner(System.in);
+    //ASCII colors to clarify output.
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
     public static final String RED = "\u001B[31m";
@@ -20,17 +21,10 @@ public class Main {
             if (args.length == 2 && args[0].equals("-A")) {
                 String option = args[1];
                 switch (option) {
-                    case "1":
-                        diningphilosophers();
-                        break;
-                    case "2":
-                        postoffice();
-                        break;
-                    case "3":
-                        readerswriters();
-                        break;
-                    default:
-                        printErr();
+                    case "1" -> diningPhilosophers();
+                    case "2" -> postOffice();
+                    case "3" -> readersWriters();
+                    default -> printErr();
                 }
             } else {
                 printErr();
@@ -44,12 +38,25 @@ public class Main {
         System.err.println("-A 1 - Dining Philosophers\n-A 2 - Post Office\n-A 3 - Readers Writers\n");
     }
 
-    private static void diningphilosophers() {
+    private static int getInput(int origin, int bound){
+        while (!input.hasNextInt()){
+            input.next();
+        }
+
+        int userInput = input.nextInt();
+        if (userInput > origin && userInput < bound){
+            return userInput;
+        }
+        return getInput(origin, bound);
+    }
+
+    private static void diningPhilosophers() {
         System.out.println("Starting Dining Philosophers");
-        System.out.println("How many philosophers?");
-        Philosopher.philosophers = input.nextInt();
-        System.out.println("How many meals?");
-        Philosopher.meals = input.nextInt();
+        System.out.println("How many philosophers? (Between 1 & 10000)");
+        Philosopher.philosophers = getInput(1, 10000);
+        System.out.println("How many meals? (Between 1 & 10000)");
+        Philosopher.meals = getInput(1, 10000);
+        input.close();
         Chopstick[] chopsticks = new Chopstick[Philosopher.philosophers];
         for (int i = 0; i < Philosopher.philosophers; i++) {
             chopsticks[i] = new Chopstick();
@@ -60,28 +67,30 @@ public class Main {
         }
     }
 
-    private static void postoffice() {
+    private static void postOffice() {
         System.out.println("Starting Post Office");
-        System.out.println("How many people?");
-        Person.numpeople = input.nextInt();
-        System.out.println("Mailbox capacity?");
-        Person.capacity = input.nextInt();
-        System.out.println("How many messages?");
-        Person.msgs = input.nextInt();
+        System.out.println("How many people? (Between 1 & 10000)");
+        Person.numpeople = getInput(1, 10000);
+        System.out.println("Mailbox capacity? (Between 1 & 10000)");
+        Person.capacity = getInput(1, 10000);
+        System.out.println("How many messages? (Between 1 & 10000)");
+        Person.msgs = getInput(1, 10000);
+        input.close();
         for (int i = 0; i < Person.numpeople; i++) {
             Thread t = new Thread(new Person(new Mailbox(), i));
             t.start();
         }
     }
 
-    private static void readerswriters() {
+    private static void readersWriters() {
         System.out.println("Starting Readers-Writers");
-        System.out.println("How many readers?");
-        ReadersWriters.r = input.nextInt();
-        System.out.println("How many writers?");
-        ReadersWriters.w = input.nextInt();
-        System.out.println("How many readers at once?");
-        ReadersWriters.maxreaders = input.nextInt();
+        System.out.println("How many readers? (Between 0 & 10000)");
+        ReadersWriters.r = getInput(0, 10000);
+        System.out.println("How many writers? (Between 0 & 10000)");
+        ReadersWriters.w = getInput(0, 10000);
+        System.out.println("How many readers at once? (Between 0 & 10000)");
+        ReadersWriters.maxreaders = getInput(0, 10000);
+        input.close();
         ReadersWriters.rcontrol.release(ReadersWriters.maxreaders);
         for (int i = 0; i < ReadersWriters.r; i++) {
             Thread t = new Thread(new Readers(i));

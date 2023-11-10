@@ -8,6 +8,7 @@ public class Chopstick {
     }
 
     public void grab(int id, String direction) {
+        //use acquireUninterruptibly since no interrupts are called
         chopstick.acquireUninterruptibly();
         System.out.printf("--%sPhilosopher %d grabbed their %s chopstick.%s\n", Main.GREEN, id, direction, Main.RESET);
     }
