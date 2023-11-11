@@ -10,30 +10,30 @@ public class Readers extends ReadersWriters implements Runnable{
     @Override
     public void run() {
         //all readers start in rcontrol semaphore queue
-        rcontrol.acquireUninterruptibly();
+        rControl.acquireUninterruptibly();
 
         if (done) {
-            wcontrol.release(w);
+            wControl.release(writerCount);
             System.exit(0);
         }
-        rmutex.acquireUninterruptibly();
-        readcount++;
-        if (readcount == 1) {
+        rMutex.acquireUninterruptibly();
+        readCount++;
+        if (readCount == 1) {
             area.acquireUninterruptibly();
         }
-        rmutex.release();
+        rMutex.release();
         System.out.printf("Reader %d began reading.\n", id);
-        for (int i = 0; i < buffer.length; i++) {
-            read = buffer[i];
+        for (int item : buffer) {
+            read = item;
             Thread.yield();
         }
         System.out.printf("-Reader %d finished reading.\n", id);
-        rmutex.acquireUninterruptibly();
-        readcount--;
-        if (readcount == 0) {
+        rMutex.acquireUninterruptibly();
+        readCount--;
+        if (readCount == 0) {
             area.release();
-            wcontrol.release();
+            wControl.release();
         }
-        rmutex.release();
+        rMutex.release();
     }
 }

@@ -70,13 +70,13 @@ public class Main {
     private static void postOffice() {
         System.out.println("Starting Post Office");
         System.out.println("How many people? (Between 1 & 10000)");
-        Person.numpeople = getInput(1, 10000);
+        Person.numPeople = getInput(1, 10000);
         System.out.println("Mailbox capacity? (Between 1 & 10000)");
         Person.capacity = getInput(1, 10000);
         System.out.println("How many messages? (Between 1 & 10000)");
         Person.msgs = getInput(1, 10000);
         input.close();
-        for (int i = 0; i < Person.numpeople; i++) {
+        for (int i = 0; i < Person.numPeople; i++) {
             Thread t = new Thread(new Person(new Mailbox(), i));
             t.start();
         }
@@ -85,18 +85,18 @@ public class Main {
     private static void readersWriters() {
         System.out.println("Starting Readers-Writers");
         System.out.println("How many readers? (Between 0 & 10000)");
-        ReadersWriters.r = getInput(0, 10000);
+        ReadersWriters.readerCount = getInput(0, 10000);
         System.out.println("How many writers? (Between 0 & 10000)");
-        ReadersWriters.w = getInput(0, 10000);
+        ReadersWriters.writerCount = getInput(0, 10000);
         System.out.println("How many readers at once? (Between 0 & 10000)");
-        ReadersWriters.maxreaders = getInput(0, 10000);
+        ReadersWriters.maxReaders = getInput(0, 10000);
         input.close();
-        ReadersWriters.rcontrol.release(ReadersWriters.maxreaders);
-        for (int i = 0; i < ReadersWriters.r; i++) {
+        ReadersWriters.rControl.release(ReadersWriters.maxReaders);
+        for (int i = 0; i < ReadersWriters.readerCount; i++) {
             Thread t = new Thread(new Readers(i));
             t.start();
         }
-        for (int i = 0; i < ReadersWriters.w; i++) {
+        for (int i = 0; i < ReadersWriters.writerCount; i++) {
             Thread t = new Thread(new Writers(i));
             t.start();
         }

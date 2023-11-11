@@ -8,7 +8,7 @@ public class Writers extends ReadersWriters implements Runnable{
 
     @Override
     public void run() {
-        wcontrol.acquireUninterruptibly();
+        wControl.acquireUninterruptibly();
         area.acquireUninterruptibly();
         System.out.printf("Writer %d started writing.\n", id);
         for (int i = 0; i < buffer.length; i++) {
@@ -17,15 +17,15 @@ public class Writers extends ReadersWriters implements Runnable{
         }
         System.out.printf("-Writer %d finished writing.\n", id);
         area.release();
-        wmutex.acquireUninterruptibly();
-        totalwritecount++;
-        if (totalwritecount == w) {
-            wmutex.release();
+        wMutex.acquireUninterruptibly();
+        totalWriteCount++;
+        if (totalWriteCount == writerCount) {
+            wMutex.release();
             done = true;
-            wcontrol.release(w);
-            rcontrol.release(r);
+            wControl.release(writerCount);
+            rControl.release(readerCount);
         }
-        wmutex.release();
-        rcontrol.release(maxreaders);
+        wMutex.release();
+        rControl.release(maxReaders);
     }
 }
