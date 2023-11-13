@@ -11,8 +11,8 @@ public class ReadersWriters {
     public static Semaphore rMutex = new Semaphore(1, true);
     public static Semaphore wMutex = new Semaphore(1, true);
     public static Semaphore area = new Semaphore(1, true);
-    public static Semaphore rControl = new Semaphore(0, true);
-    public static Semaphore wControl = new Semaphore(0, true);
+    public static Semaphore readControl = new Semaphore(0, true);
+    public static Semaphore writeControl = new Semaphore(0, true);
     public static int[] buffer = new int[5];
 
 }

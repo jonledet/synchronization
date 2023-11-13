@@ -1,11 +1,7 @@
 import java.util.concurrent.Semaphore;
 
 public class Chopstick {
-    Semaphore chopstick;
-
-    public Chopstick() {
-        chopstick = new Semaphore(1, true);
-    }
+    Semaphore chopstick = new Semaphore(1, true);
 
     public void grab(int id, String direction) {
         //use acquireUninterruptibly since no interrupts are called

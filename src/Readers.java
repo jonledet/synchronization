@@ -1,39 +1,48 @@
 public class Readers extends ReadersWriters implements Runnable{
-
     public int id;
+    //variable to read into while simulating read latency
     public int read;
 
     public Readers(int id) {
         this.id = id;
     }
 
-    @Override
-    public void run() {
-        //all readers start in rcontrol semaphore queue
-        rControl.acquireUninterruptibly();
-
-        if (done) {
-            wControl.release(writerCount);
-            System.exit(0);
-        }
+    public void read(){
         rMutex.acquireUninterruptibly();
-        readCount++;
-        if (readCount == 1) {
+        if(readCount == 0){
+            //claim area semaphore if first reader
             area.acquireUninterruptibly();
         }
+        readCount++;
         rMutex.release();
-        System.out.printf("Reader %d began reading.\n", id);
-        for (int item : buffer) {
-            read = item;
-            Thread.yield();
-        }
-        System.out.printf("-Reader %d finished reading.\n", id);
+
+        //simulating reading latency
+        simReadLatency();
+
         rMutex.acquireUninterruptibly();
-        readCount--;
-        if (readCount == 0) {
+        if(readCount == 1){
+            //release area semaphore and 1 writer if last reader
             area.release();
-            wControl.release();
+            writeControl.release();
         }
+        readCount--;
         rMutex.release();
+    }
+
+    public void simReadLatency(){
+        for(int elmt : buffer){
+            read = elmt;
+        }
+    }
+
+    @Override
+    public void run() {
+        //pattern is maxReaders read, 1 writer writes, maxReaders read,...
+        //readers get stuck in empty semaphore queue and maxReaders are released at a time to maintain pattern
+        readControl.acquireUninterruptibly();
+
+        //reader algorithm allowing maxReaders to read at once
+        read();
+
     }
 }

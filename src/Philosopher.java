@@ -14,8 +14,8 @@ public class Philosopher implements Runnable{
     //barrier variables
     public static Semaphore start = new Semaphore(0, true);
     public static Semaphore end = new Semaphore(0, true);
-    public static int sCount = 0;
-    public static int eCount = 0;
+    public static int startCount = 0;
+    public static int endCount = 0;
 
     public Philosopher(int id, Chopstick left, Chopstick right) {
         this.id = id;
@@ -26,9 +26,9 @@ public class Philosopher implements Runnable{
     //all philosophers get stuck in semaphore queue until the last one arrives
     public void startBarrier() {
         count.acquireUninterruptibly();
-        sCount++;
+        startCount++;
         System.out.printf("%sPhilosopher %d is here.%s\n",Main.CYAN, id, Main.RESET);
-        if (sCount == philosophers){
+        if (startCount == philosophers){
             start.release(philosophers);
             System.out.printf("-%sAll philosophers are here.%s\n",Main.CYAN, Main.RESET);
         }
@@ -39,9 +39,9 @@ public class Philosopher implements Runnable{
     //all philosophers get stuck in semaphore queue until the last one arrives
     public void endBarrier() {
         count.acquireUninterruptibly();
-        eCount++;
+        endCount++;
 
-        if (eCount == philosophers){
+        if (endCount == philosophers){
             end.release();
             System.out.printf("------%sAll philosophers are ready to leave.%s\n", Main.PURPLE, Main.RESET);
         }
