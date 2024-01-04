@@ -10,13 +10,15 @@ public class Writers extends ReadersWriters implements Runnable{
     public void write(){
         area.acquireUninterruptibly();
 
-        //simulate writing latency
         simWriteLatency();
+        System.out.printf("----W%d finished writing.\n", id);
 
         area.release();
     }
 
+    //simulate writing latency
     public void simWriteLatency(){
+        System.out.printf("---W%d started writing.\n", id);
         for(int i = 0; i < buffer.length; i++){
             buffer[i] = ThreadLocalRandom.current().nextInt();
         }
@@ -30,6 +32,14 @@ public class Writers extends ReadersWriters implements Runnable{
 
         //basic writer algorithm
         write();
+
+        wMutex.acquireUninterruptibly();
+        totalWriteCount++;
+        if(totalWriteCount == writerCount){
+            done = true;
+            wMutex.release();
+            System.exit(0);
+        }
 
         //release maxReaders after writer is finished
         readControl.release(maxReaders);

@@ -91,6 +91,7 @@ public class Main {
         System.out.println("How many readers at once? (Between 0 & 10000)");
         ReadersWriters.maxReaders = getInput(0, 10000);
         input.close();
+        ReadersWriters.readControl.release(ReadersWriters.maxReaders);
         for (int i = 0; i < ReadersWriters.readerCount; i++) {
             Thread t = new Thread(new Readers(i));
             t.start();
@@ -99,6 +100,5 @@ public class Main {
             Thread t = new Thread(new Writers(i));
             t.start();
         }
-        ReadersWriters.readControl.release(ReadersWriters.maxReaders);
     }
 }
