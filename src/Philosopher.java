@@ -1,6 +1,6 @@
 import java.util.concurrent.Semaphore;
 
-public class Philosopher implements Runnable{
+public class Philosopher implements Runnable {
 
     //dining philosopher variables
     public static int philosophers;

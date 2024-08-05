@@ -16,8 +16,8 @@ public class Readers extends ReadersWriters implements Runnable{
         readCount++;
         rMutex.release();
 
-        //simulating reading latency
         simReadLatency();
+        System.out.printf("--R%d finished reading.\n", id);
 
         rMutex.acquireUninterruptibly();
         if(readCount == 1){
@@ -29,7 +29,9 @@ public class Readers extends ReadersWriters implements Runnable{
         rMutex.release();
     }
 
+    //simulating reading latency
     public void simReadLatency(){
+        System.out.printf("-R%d started reading.\n", id);
         for(int elmt : buffer){
             read = elmt;
         }
@@ -44,5 +46,8 @@ public class Readers extends ReadersWriters implements Runnable{
         //reader algorithm allowing maxReaders to read at once
         read();
 
+        if(done){
+            System.exit(0);
+        }
     }
 }
