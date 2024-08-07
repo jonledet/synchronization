@@ -28,6 +28,29 @@ Each of these problems is solved with proper synchronization techniques, ensurin
 The project is structured as follows:
 
 - `src/` : Contains the source code for the three synchronization problems.
+```
+synchronization/
+├── src/
+│   └── com/
+│       └── jonledet/
+│           ├── main/
+│           │    └── Main.java
+│           ├── philosopher/
+│           │    ├── Philosopher.java
+│           │    ├── Chopstick.java
+│           ├── mailbox/
+│           │    ├── Person.java
+│           │    ├── Mailbox.java
+│           ├── readwrite/
+│           │    ├── ReadersWriters.java
+│           │    ├── Readers.java
+│           │    └── Writers.java
+│           └── utils/
+│                ├── Colors.java
+│                └── Tools.java
+│
+└── out/
+```
 - `docs/` : Documentation and additional resources.
 
 ## How to Use
