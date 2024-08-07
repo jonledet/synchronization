@@ -4,17 +4,16 @@ import com.jonledet.utils.*;
 import java.util.concurrent.Semaphore;
 
 public class Philosopher implements Runnable {
+    public int id;
+    public Chopstick left;
+    public Chopstick right;
 
     //dining philosopher variables
     public static int philosophers;
     public static int meals;
     public static int mealsEaten = 0;
-    public int id;
     public static Semaphore count = new Semaphore(1, true);
     public static Semaphore mutex = new Semaphore(1, true);
-    public Chopstick left;
-    public Chopstick right;
-    //barrier variables
     public static Semaphore start = new Semaphore(0, true);
     public static Semaphore end = new Semaphore(0, true);
     public static int startCount = 0;

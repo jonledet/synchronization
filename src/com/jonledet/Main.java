@@ -1,4 +1,4 @@
-package com.jonledet.main;
+package com.jonledet;
 
 import com.jonledet.mailbox.Mailbox;
 import com.jonledet.mailbox.Person;
@@ -11,24 +11,21 @@ import com.jonledet.utils.Tools;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            if (args.length == 2 && args[0].equals("-A")) {
-                String option = args[1];
-                switch (option) {
-                    case "1" -> diningPhilosophers();
-                    case "2" -> postOffice();
-                    case "3" -> readersWriters();
-                    default -> printErr();
-                }
-            } else {
-                printErr();
+        if (args.length != 2 || !args[0].equals("-A")) {
+            printError();
+        }
+        else {
+            String option = args[1];
+            switch (option) {
+                case "1" -> diningPhilosophers();
+                case "2" -> postOffice();
+                case "3" -> readersWriters();
+                default -> printError();
             }
-        } catch (Exception e) {
-            printErr();
         }
     }
 
-    private static void printErr() {
+    private static void printError() {
         System.err.println("-A 1 - Dining Philosophers\n-A 2 - Post Office\n-A 3 - Readers Writers\n");
     }
 
@@ -36,7 +33,6 @@ public class Main {
         while (!Tools.input.hasNextInt()){
             Tools.input.next();
         }
-
         int userInput = Tools.input.nextInt();
         if (userInput > origin && userInput < bound){
             return userInput;
