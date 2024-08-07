@@ -1,3 +1,5 @@
+package com.jonledet.mailbox;
+
 import java.util.Stack;
 import java.util.concurrent.Semaphore;
 

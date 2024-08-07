@@ -1,3 +1,6 @@
+package com.jonledet.mailbox;
+
+import com.jonledet.utils.Tools;
 import java.util.concurrent.Semaphore;
 
 public class Person implements Runnable{
@@ -19,7 +22,7 @@ public class Person implements Runnable{
     }
 
     public int randIntAvoid(int origin, int bound, int avoid) {
-        int rand = Main.random.nextInt(origin, bound);
+        int rand = Tools.random.nextInt(origin, bound);
         if (rand == avoid) {
             return randIntAvoid(origin, bound, avoid);
         }

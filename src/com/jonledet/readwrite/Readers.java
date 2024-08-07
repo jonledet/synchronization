@@ -1,3 +1,5 @@
+package com.jonledet.readwrite;
+
 public class Readers extends ReadersWriters implements Runnable{
     public int id;
     //variable to read into while simulating read latency

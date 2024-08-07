@@ -1,3 +1,5 @@
+package com.jonledet.readwrite;
+
 import java.util.concurrent.Semaphore;
 
 public class ReadersWriters {

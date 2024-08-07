@@ -1,21 +1,15 @@
-import java.util.Random;
-import java.util.Scanner;
+package com.jonledet.main;
+
+import com.jonledet.mailbox.Mailbox;
+import com.jonledet.mailbox.Person;
+import com.jonledet.philosophers.Chopstick;
+import com.jonledet.philosophers.Philosopher;
+import com.jonledet.readwrite.Readers;
+import com.jonledet.readwrite.ReadersWriters;
+import com.jonledet.readwrite.Writers;
+import com.jonledet.utils.Tools;
 
 public class Main {
-
-    public static Random random = new Random();
-    public static Scanner input = new Scanner(System.in);
-    //ASCII colors to clarify output.
-    public static final String RESET = "\u001B[0m";
-    public static final String BLACK = "\u001B[30m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String WHITE = "\u001B[37m";
-
     public static void main(String[] args) {
         try {
             if (args.length == 2 && args[0].equals("-A")) {
@@ -39,11 +33,11 @@ public class Main {
     }
 
     private static int getInput(int origin, int bound){
-        while (!input.hasNextInt()){
-            input.next();
+        while (!Tools.input.hasNextInt()){
+            Tools.input.next();
         }
 
-        int userInput = input.nextInt();
+        int userInput = Tools.input.nextInt();
         if (userInput > origin && userInput < bound){
             return userInput;
         }
@@ -56,7 +50,7 @@ public class Main {
         Philosopher.philosophers = getInput(1, 10000);
         System.out.println("How many meals? (Between 1 & 10000)");
         Philosopher.meals = getInput(1, 10000);
-        input.close();
+        Tools.input.close();
         Chopstick[] chopsticks = new Chopstick[Philosopher.philosophers];
         for (int i = 0; i < Philosopher.philosophers; i++) {
             chopsticks[i] = new Chopstick();
@@ -75,7 +69,7 @@ public class Main {
         Person.capacity = getInput(1, 10000);
         System.out.println("How many messages? (Between 1 & 10000)");
         Person.msgs = getInput(1, 10000);
-        input.close();
+        Tools.input.close();
         for (int i = 0; i < Person.numPeople; i++) {
             Thread t = new Thread(new Person(new Mailbox(), i));
             t.start();
@@ -90,7 +84,7 @@ public class Main {
         ReadersWriters.writerCount = getInput(0, 10000);
         System.out.println("How many readers at once? (Between 0 & 10000)");
         ReadersWriters.maxReaders = getInput(0, 10000);
-        input.close();
+        Tools.input.close();
         ReadersWriters.readControl.release(ReadersWriters.maxReaders);
         for (int i = 0; i < ReadersWriters.readerCount; i++) {
             Thread t = new Thread(new Readers(i));

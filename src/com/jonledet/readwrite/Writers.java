@@ -1,3 +1,5 @@
+package com.jonledet.readwrite;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Writers extends ReadersWriters implements Runnable{
