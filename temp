@@ -1,0 +1,181 @@
+Project 1: Synchronization
+(Individual Project; collaboration is forbidden; use of AI Chatbots is forbidden; use of third party vendor is forbidden)
+Assigned: September 21, 2023
+Due: October 05, 2023 (via Moodle)
+
+This project is worth 10% of the overall weight for this course. It is graded out of 195 points on a detailed rubric.
+Learning Outcomes and Objectives
+After successful completion of this assignment, students will be able to:
+	Solve synchronization problems and implement their solution in software.
+	Use and improve their critical thinking, problem solving, and software development skills to transform given project specifications into an implementation using user or kernel threads.
+	Write robust code and test correctness and resiliency of their solution.
+	Communicate with the instructor and teaching assistants to seek a greater understanding and clarification on topics they need support with.
+Choice of Implementation
+This project can be implemented in either standalone Java, or POSIX threads (pthreads) with C or C⁠+⁠+.
+Only Java or C/C⁠+⁠+ with pthreads are supported with documentation provided on Moodle. This project specification is written with reference to Java, and pthreads with C/C⁠+⁠+. Each implementation choice is explained with helpful hints.
+Student Learning Outcomes Assessed for ABET Accreditation
+Student Outcomes (SOs) Assessed
+SO 1. Analyze a complex computing problem and to apply principles of computing and other relevant disciplines to identify solutions.
+SO 6. Be proficient in more than one programming language on more than one computing platform.
+ 
+Detailed Instructions for this Project
+This project will help students understand synchronization problems and devise software solutions for them through the following tasks:
+	Dining Philosophers (Semaphores)
+	Post Office Simulation (Semaphores)
+	Readers-Writers problem (Semaphores)
+	Command Line
+	Report
+This document provides a detailed specification of the above tasks. In addition, it includes design and implementation hints to prepare students for further work. Before you begin, go over Dr. Kumar’s lectures on semaphores and classic problems on synchronization. These will be very helpful for creating software solutions.
+If using Java, see the tutorials on Moodle to setup and use the Java SDK, along with the IntelliJ IDE.
+If using pthreads, see the tutorials on Moodle to setup and use GCC and the pthreads API.
+Task 1: Dining Philosophers (Semaphores)
+Summary
+For this task, you must first understand the Dining Philosophers problem. After doing so, you must implement a solution that uses only semaphores in its implementation of synchronization control. The only busy waiting loops to be used are the ones that allow a philosopher to eat and think for random amounts of time.
+Procedure
+Prompt the user for P and M, where P is the number of philosophers and M is the total number of meals to be eaten. After prompting the user for P and M, fork a single thread for each philosopher. There will be a number of chopsticks available equal to the number of philosophers (P). Each thread will then run through the Dining Philosophers algorithm, which is shown below:
+	Sit down at table.
+	Pick up left chopstick.
+	Pick up right chopstick.
+	Begin eating.
+	Continue eating for 3–6 cycles.
+	Put down left chopstick.
+	Put down right chopstick.
+	Begin thinking.
+	Continue thinking for 3–6 cycles.
+	IF all meals have not been eaten, GOTO 2.
+	ELSE leave the table.
+As this is an extraordinarily polite group of philosophers, they hold themselves to the highest standards of etiquette. All philosophers must enter the room together and none should sit down until all are present. Likewise, no philosopher should get up from the table to leave until all are ready to do so.
+The chopsticks can be represented as an array of semaphores. The philosophers themselves are seated in a circle such that philosopher N has access to chopstick N on their left and chopstick (N+1)"\%" P on their right. These chopsticks are the shared resource that you must control access to as part of your solution. A philosopher can only pick up a chopstick when it is available. If the chopstick is not available, then the philosopher must be put to sleep by the semaphore.
+As the philosophers progress through the algorithm, they must produce output. Specifically, they must produce output at steps 1, 2, 3, 4, 6, 7, 8, and 11 in the algorithm outlined above. All output must specify which philosopher is producing the output, as well as any other identifiers involved such as chopstick numbers, or number of meals eaten so far.
+Once the total number of meals have been eaten, no philosopher should eat any additional meals. It is acceptable for such a philosopher to proceed normally through the algorithm, with associated output, as long as no additional meals are eaten.
+Note: Using busy waiting loops for any part of this task, apart from a philosopher eating or thinking for a random amount of time, will result in a penalty.
+Report
+As part of your report, answer the following questions about Task 1:
+	Note the runtime in milliseconds for at least 3 different sets of parameters. Each time, vary the following: the random seed, number of philosophers, and number of meals. Record your results in a table, and include the parameters that you used each time. Explain your findings.
+	If using Java, the system time in nanoseconds can be collected with System.nanoTime(). Here’s a code snippet that uses System.nanoTime() to measure the runtime of a piece of code in milliseconds:
+long start_time = System.nanoTime();
+
+// Runtime code
+
+long end_time = System.nanoTime();
+System.out.printf("Runtime in milliseconds = ");
+System.out.println((end_time - start_time) / 1000000.0);
+	If using pthreads, the system time in nanoseconds (separated into a seconds part and a fractional nanoseconds part) can be collected with clock_gettime() from time.h. Here’s a code snippet that uses clock_gettime() to measure the runtime of a piece of code in milliseconds:
+struct timespec start;
+clock_gettime(CLOCK_MONOTONIC, &start);
+
+// Runtime code
+
+struct timespec end;
+clock_gettime(CLOCK_MONOTONIC, &end);
+double runtime = (end.tv_sec - start.tv_sec) * 1000.0;
+runtime += (end.tv_nsec - start.tv_nsec) / 1000000.0;
+printf("Runtime in milliseconds = %f\n", runtime);
+	Make the philosophers yield between attempting to pick up the left and right chopsticks. Run the same tests you ran in the previous question, and record the results. Were the results the same or different? Why? Undo any changes made to accommodate this question before submitting your assignment.
+Task 2: Post Office Simulation (Semaphores)
+Summary
+For this task, you will implement a simulation of a post office. Prompt the user for N, S, and M, where N is the number of people participating in the simulation, S is the number of messages a person’s mailbox can hold, and M is the total number of messages to be sent before the simulation ends. You must use semaphores to control mailbox access when attempting to send a message to another person.
+Procedure
+After prompting the user for N, S, and M, fork several threads equal to the number of people involved in the simulation. Each person then proceeds according to the following algorithm:
+	Enter the post office.
+	Read a message in that person’s mailbox.
+	Call V() on a semaphore corresponding to that person’s mailbox.
+	Yield.
+	IF there are more messages to read, GOTO 2.
+	ELSE compose a message addressed to a random person other than themselves.
+	Call P() on a semaphore corresponding to the recipient’s mailbox.
+	Place the message in their mailbox.
+	Leave the post office.
+	Wait for 3–6 cycles.
+	GOTO 1.
+For this task, the mailboxes are the critical resource that must be protected via synchronization techniques. Like the chopsticks in Task 1, you must control access to the mailboxes as part of your solution. The messages that each person sends should be randomly selected from a list.
+The mailboxes themselves can be represented as 2D arrays. One dimension of the array represents the person who owns the mailbox, while the other dimension represents the slots in the mailbox that can hold messages addressed to that person.
+The use of semaphore in steps 3 and 7 represents the space available in the mailbox. Calling V() represents the action of freeing up room in the mailbox when a message is read, and calling P() represents the action of taking up a slot in the mailbox when inserting a message.
+Like Task 1, you must provide output as the people move through the algorithm. In particular, there must be output associated with steps 1, 2, 6, 8, and 9. In addition, you must provide output detailing the contents of read, composed, and sent messages, as well as the senders and recipients of all messages.
+Each person must be aware of the total number of messages sent and should not attempt to send a message if this limit has been reached. It is acceptable for such a person to proceed through the algorithm as usual, with associated output, as long as no messages are sent.
+	For Java, use acquire() and release() for P() and V(), respectively.
+	For pthreads, use sem_wait() and sem_post() for P() and V(), respectively.
+Report
+As part of your report, answer the following question about Task 2:
+	Did you experience any deadlock when testing this task? How was it different from Task 1?
+Task 3: Readers-Writer Problem (Semaphores)
+Summary
+For this task, you will implement a solution to Readers-Writers problem. Prompt the user for R, W, and N, where R is the number of readers, W is the number of writers, and N is the max number of readers that can read the file at once. You must use semaphores to control file access when attempting to read/write the file.
+Procedure
+After prompting the user for R, W, and N, fork several threads equal to the number of readers and writers that access a file to read or write. There is no need to actually read or write to a file, wait for some cycles or do some work to represent read/write latency.
+Readers only read the information from the file and does not change file contents. Writers can change the file contents. The basic synchronization constraint is the any number of readers should be able to access the file at the same time, but only one writer can write to the file at a time (without any readers).
+For this task, the design should be such that N readers read, 1 writer writes, N readers read, 1 writer writes and so on. If a reader or writer is not available at a time, your solution must wait until they become available, and the pattern must be maintained. Yield is not allowed for this task.
+Report
+As part of your report, answer the following question about Task 3:
+	How did this task differ from the previous synchronization tasks?
+	What kind of problems do you see when N is very large (i.e. high priority is given to readers)?
+Task 4: Command Line
+Summary
+For this task, you are required to add a command line argument to your program that will select which task to run. Invalid values should result in an error message.
+The list of valid arguments is as follows:
+Command Line Argument Options
+Argument	Task
+-A 1	Task 1: Dining Philosophers (Semaphores)
+-A 2	Task 2: Post Office Simulation (Semaphores)
+-A 3	Task 3: Readers-Writer Problem (Semaphores)
+
+If you are running your program directly from the command line, add the argument to the end of the command you use to run the program (as in ./main.exe -A 1).
+For Java in IntelliJ, you can pass one or more arguments to your program using the Program Arguments field under Run > Edit Configurations. For example, for task 1, you would type “-A 1” here.
+Procedure
+Make sure you validate the parameter for sanity and correct value range, including whether the parameter actually exists. (For example, ./main.exe -A should not cause a segfault or otherwise crash your program.)
+Task 5: Report
+Summary
+You must turn in a report on this assignment along with your code. In addition to the questions listed under each task, the report should answer the following:
+	In your own words, explain how you implemented each task. Did you encounter any bugs? If so, how did you fix them? If you failed to complete any tasks, list them here and briefly explain why.
+	What data structures and algorithms did you use for each task?
+Procedure
+Your report should be in .pdf, .txt, .doc, or .odt format. Other formats are acceptable, but you run the risk of the TA being unable to open or read it. Such reports will receive 0 points with no opportunity for resubmission.
+Your name and ULID must be clearly visible. The questions in the report should be arranged by their associated task, then numbered. There is no minimum length, although insufficient detail in your answers will result in a penalty.
+Hints
+You are expected to validate user input. The same concerns about acceptable input types and edge cases within that type apply. Under no circumstances should your code segfault, initiate a stack dump, or terminate with an assertion failure or an uncaught exception. It will be thoroughly tested with a wide range of valid and invalid inputs to check for this.
+Your code should gracefully handle any errors that crop up. Graceful handling means not letting the program crash, but instead catching and managing the error so that, at the very least, the program can exit normally. Any crash, segfault, or otherwise abnormal program termination will result in a penalty, no matter the cause, so it is in your best interest to use good error-handling practices.
+To clarify when busy waiting loops vs. semaphores should be used:
+	In Task 1, use semaphores and only semaphores, with no busy waiting loops, with the exception of philosophers who are idling while they eat or think. Again, this includes etiquette.
+	In Task 2, you should use semaphores when a person attempts to put mail into someone else’s mailbox. Specifically, you should use P() and V() to represent mail being inserted and removed from the mailbox. This is outlined in further detail under the Task 2 notes.
+	In Task 3, you should use semaphores to control file access and reader/writer control. Specifically, you should use P() and V() to represent file access and availability. Note that semaphores can be initialized to a value greater than 1.
+Code Commenting
+Throughout your code, use comments to indicate what is being done in reasonable detail.
+
+Submission
+For C/C⁠+⁠+ submissions:
+Use the following directory structure, then compress to a .zip or .tar.gz file.
+project01_<ULID>
+│
+└─project01_<ULID>_report.(pdf|txt|doc|odt)
+│
+└─code
+  │
+  └─main.(c|cpp)
+  │
+  └─If needed: <sources>.(c|cpp), <sources>.h, <subfolders>
+Here, <sources>.(c|cpp), <sources>.h, and <subfolders> refer to any extra source files, headers, or subfolders your program needs. Name the source file with your main() function, where program execution will start, main.c or main.cpp.
+You do not need to include any object files (of type .o), link libraries, or compiled executables in your submission. Please include the command used to compile your project in your report, as the TA may not use the same type of machine or specific development environment that you do.
+For Java submissions:
+Use the following directory structure, then compress to a .zip or .tar.gz file.
+project01_<ULID>
+│
+└─project01_<ULID>_report.(pdf|txt|doc|odt)
+│
+└─code
+  │
+  └─Generated by IntelliJ: .idea, code.iml
+  │
+  └─src
+    │
+    └─<com>
+      │
+      └─<company>
+        │
+        └─main.java
+        │
+        └─If needed: <sources>.java, <subfolders>
+The names of the folders labeled here <com> and <company> may vary based on how you have set up your project; the folder hierarchy may be deeper or shallower than the one depicted here. The important part is that the innermost folder under src contains your Java code.
+Here, <sources>.java and <subfolders> refer to any extra source files or subfolders your program needs. Name the source file with your main() method, where program execution will start, main.java.
+You do not need to include any files of type .class or .jar in your submission.
+Do not submit a paper copy.
+Late and improper submissions will receive a maximum of 50% credit for the first 24 hours after the deadline and zero credit afterward.
