@@ -15,8 +15,7 @@ public class Main {
             printError();
         }
         else {
-            String option = args[1];
-            switch (option) {
+            switch (args[1]) {
                 case "1" -> diningPhilosophers();
                 case "2" -> postOffice();
                 case "3" -> readersWriters();
