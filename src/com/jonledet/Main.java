@@ -9,6 +9,8 @@ import com.jonledet.readwrite.ReadersWriters;
 import com.jonledet.readwrite.Writers;
 import com.jonledet.utils.Tools;
 
+import java.util.concurrent.Semaphore;
+
 public class Main {
     public static void main(String[] args) {
         if (args.length != 2 || !args[0].equals("-A")) {
@@ -74,18 +76,21 @@ public class Main {
     private static void readersWriters() {
         System.out.println("Starting Readers-Writers");
         System.out.println("How many readers? (Between 0 & 10000)");
-        ReadersWriters.readerCount = getInput(0, 10000);
+        int readerCount = getInput(0, 10000);
+        ReadersWriters.readerCount = readerCount;
         System.out.println("How many writers? (Between 0 & 10000)");
-        ReadersWriters.writerCount = getInput(0, 10000);
+        int writerCount = getInput(0, 10000);
+        ReadersWriters.writerCount = writerCount;
         System.out.println("How many readers at once? (Between 0 & 10000)");
-        ReadersWriters.maxReaders = getInput(0, 10000);
+        int maxReaders = getInput(0, 10000);
+        ReadersWriters.maxReaders = maxReaders;
+        ReadersWriters.readerControl = new Semaphore(maxReaders, true);
         Tools.input.close();
-        ReadersWriters.readControl.release(ReadersWriters.maxReaders);
-        for (int i = 0; i < ReadersWriters.readerCount; i++) {
+        for (int i = 0; i < readerCount; i++) {
             Thread t = new Thread(new Readers(i));
             t.start();
         }
-        for (int i = 0; i < ReadersWriters.writerCount; i++) {
+        for (int i = 0; i < writerCount; i++) {
             Thread t = new Thread(new Writers(i));
             t.start();
         }
