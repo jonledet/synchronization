@@ -71,7 +71,7 @@ public class Main {
             mailboxes[i] = new Mailbox(capacity);
         }
         for (int i = 0; i < personCount; i++) {
-            Thread t = new Thread(new Person(mailboxes[i]));
+            Thread t = new Thread(new Person(i, mailboxes[i]));
             t.start();
         }
     }
