@@ -8,7 +8,6 @@ import com.jonledet.readwrite.Readers;
 import com.jonledet.readwrite.ReadersWriters;
 import com.jonledet.readwrite.Writers;
 import com.jonledet.utils.Tools;
-
 import java.util.concurrent.Semaphore;
 
 public class Main {
@@ -61,14 +60,18 @@ public class Main {
     private static void postOffice() {
         System.out.println("Starting Post Office");
         System.out.println("How many people? (Between 1 & 10000)");
-        Person.numPeople = getInput(1, 10000);
+        int personCount = getInput(1, 10000);
         System.out.println("Mailbox capacity? (Between 1 & 10000)");
-        Person.capacity = getInput(1, 10000);
+        int capacity = getInput(1, 10000);
         System.out.println("How many messages? (Between 1 & 10000)");
-        Person.msgs = getInput(1, 10000);
+        Person.totalMessages = getInput(1, 10000);
         Tools.input.close();
-        for (int i = 0; i < Person.numPeople; i++) {
-            Thread t = new Thread(new Person(new Mailbox(), i));
+        Mailbox[] mailboxes = new Mailbox[personCount];
+        for (int i = 0; i < personCount; i++) {
+            mailboxes[i] = new Mailbox(capacity);
+        }
+        for (int i = 0; i < personCount; i++) {
+            Thread t = new Thread(new Person(mailboxes[i]));
             t.start();
         }
     }

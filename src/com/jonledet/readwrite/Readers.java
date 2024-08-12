@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 
 public class Readers extends ReadersWriters implements Runnable{
     public int id;
-    public static int maxReaders;
     public static int readCount = 0;
     public static int totalReaders = 0;
     public static Semaphore mutex = new Semaphore(1, true);

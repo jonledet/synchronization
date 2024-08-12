@@ -4,8 +4,11 @@ import java.util.Stack;
 import java.util.concurrent.Semaphore;
 
 public class Mailbox {
-    public Stack<String> box = new Stack<>();
-    public Semaphore mutex = new Semaphore(1,true);
-    public Semaphore fullSpaces = new Semaphore(0, true);
-    public Semaphore emptySpaces = new Semaphore(Person.capacity, true);
+    public Stack<String> stack = new Stack<>();
+    public Semaphore full = new Semaphore(0, true);
+    public Semaphore empty;
+
+    public Mailbox(int capacity) {
+        this.empty = new Semaphore(capacity, true);
+    }
 }
