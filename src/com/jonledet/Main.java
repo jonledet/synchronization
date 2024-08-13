@@ -2,6 +2,7 @@ package com.jonledet;
 
 import com.jonledet.mailbox.Mailbox;
 import com.jonledet.mailbox.Person;
+import com.jonledet.mailbox.PostOffice;
 import com.jonledet.philosophers.Chopstick;
 import com.jonledet.philosophers.Philosopher;
 import com.jonledet.readwrite.Readers;
@@ -62,17 +63,21 @@ public class Main {
         System.out.println("Starting Post Office");
         System.out.println("How many people? (Between 1 & 10000)");
         int personCount = getInput(1, 10000);
+        PostOffice.people = new Person[personCount];
         System.out.println("Mailbox capacity? (Between 1 & 10000)");
         int capacity = getInput(1, 10000);
         System.out.println("How many messages? (Between 1 & 10000)");
         Person.totalMessages = getInput(1, 10000);
         Tools.input.close();
         Mailbox[] mailboxes = new Mailbox[personCount];
+        Person[] people = new Person[personCount];
         for (int i = 0; i < personCount; i++) {
             mailboxes[i] = new Mailbox(capacity);
+            people[i] = new Person(i, mailboxes[i]);
+            PostOffice.people[i] = people[i];
         }
         for (int i = 0; i < personCount; i++) {
-            Thread t = new Thread(new Person(i, mailboxes[i]));
+            Thread t = new Thread(people[i]);
             t.start();
         }
     }

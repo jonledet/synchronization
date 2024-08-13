@@ -29,10 +29,10 @@ public class Philosopher implements Runnable {
     public void startBarrier() {
         count.acquireUninterruptibly();
         startCount++;
-        System.out.printf("%sPhilosopher %d is here.%s\n", Colors.CYAN, id, Colors.RESET);
+        System.out.printf("%sPhilosopher %d is here.%s\n", Colors.YELLOW, id, Colors.RESET);
         if (startCount == philosophers){
             start.release(philosophers);
-            System.out.printf("-%sAll philosophers are here.%s\n", Colors.CYAN, Colors.RESET);
+            System.out.printf("-%sAll philosophers are here.%s\n", Colors.YELLOW, Colors.RESET);
         }
         count.release();
         start.acquireUninterruptibly();
@@ -45,24 +45,24 @@ public class Philosopher implements Runnable {
 
         if (endCount == philosophers){
             end.release();
-            System.out.printf("------%sAll philosophers are ready to leave.%s\n", Colors.PURPLE, Colors.RESET);
+            System.out.printf("------%sAll philosophers are ready to leave.%s\n", Colors.ORANGE, Colors.RESET);
         }
         count.release();
         end.acquireUninterruptibly();
-        System.out.printf("-------%sPhilosopher %d left.%s\n", Colors.PURPLE, id, Colors.RESET);
+        System.out.printf("-------%sPhilosopher %d left.%s\n", Colors.ORANGE, id, Colors.RESET);
         end.release();
     }
 
     //eating and thinking, threads yield for 3-6 cycles
     public void eat() {
-        System.out.printf("---%sPhilosopher %d is eating.%s\n", Colors.BLUE, id, Colors.RESET);
+        System.out.printf("---%sPhilosopher %d is eating.%s\n", Colors.CYAN, id, Colors.RESET);
         for (int i = 0; i < Tools.random.nextInt(3,7); i++) {
             Thread.yield();
         }
     }
 
     public void think() {
-        System.out.printf("-----%sPhilosopher %d is thinking.%s\n", Colors.BLUE, id, Colors.RESET);
+        System.out.printf("-----%sPhilosopher %d is thinking.%s\n", Colors.PURPLE, id, Colors.RESET);
         for (int i = 0; i < Tools.random.nextInt(3,7); i++) {
             Thread.yield();
         }

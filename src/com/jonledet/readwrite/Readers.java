@@ -25,7 +25,7 @@ public class Readers extends ReadersWriters implements Runnable{
         }
         mutex.release();
 
-        System.out.printf("-%sR%d started reading.%s\n", Colors.BLUE, id, Colors.RESET);
+        System.out.printf("-%sR%d started reading.%s\n", Colors.CYAN, id, Colors.RESET);
 
         //simulate read latency
         try {

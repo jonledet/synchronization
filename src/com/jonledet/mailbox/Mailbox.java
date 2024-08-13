@@ -4,8 +4,7 @@ import java.util.Stack;
 import java.util.concurrent.Semaphore;
 
 public class Mailbox extends PostOffice{
-    public Stack<String> mailbox = new Stack<>();
-    public Stack<Integer> recipient = new Stack<>();
+    public Stack<Messages> mailbox = new Stack<>();
     public Semaphore full = new Semaphore(0, true);
     public Semaphore mutex = new Semaphore(1, true);
     public Semaphore empty;
